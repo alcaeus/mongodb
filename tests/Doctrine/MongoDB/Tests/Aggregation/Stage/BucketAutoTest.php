@@ -12,8 +12,8 @@ class BucketAutoTest extends TestCase
 
     public function testBucketAutoStage()
     {
-        $bucketStage = new BucketAuto($this->getTestAggregationBuilder());
-        $bucketStage
+        $bucketAutoStage = new BucketAuto($this->getTestAggregationBuilder());
+        $bucketAutoStage
             ->groupBy('$someField')
             ->buckets(3)
             ->granularity('R10')
@@ -21,12 +21,12 @@ class BucketAutoTest extends TestCase
                 ->field('averageValue')
                 ->avg('$value');
 
-        $this->assertSame(['$bucket' => [
+        $this->assertSame(['$bucketAuto' => [
             'groupBy' => '$someField',
             'buckets' => 3,
             'granularity' => 'R10',
             'output' => ['averageValue' => ['$avg' => '$value']]
-        ]], $bucketStage->getExpression());
+        ]], $bucketAutoStage->getExpression());
     }
 
     public function testBucketAutoFromBuilder()
@@ -40,7 +40,7 @@ class BucketAutoTest extends TestCase
                 ->field('averageValue')
                 ->avg('$value');
 
-        $this->assertSame([['$bucket' => [
+        $this->assertSame([['$bucketAuto' => [
             'groupBy' => '$someField',
             'buckets' => 3,
             'granularity' => 'R10',
@@ -50,14 +50,14 @@ class BucketAutoTest extends TestCase
 
     public function testBucketAutoSkipsUndefinedProperties()
     {
-        $bucketStage = new BucketAuto($this->getTestAggregationBuilder());
-        $bucketStage
+        $bucketAutoStage = new BucketAuto($this->getTestAggregationBuilder());
+        $bucketAutoStage
             ->groupBy('$someField')
             ->buckets(3);
 
-        $this->assertSame(['$bucket' => [
+        $this->assertSame(['$bucketAuto' => [
             'groupBy' => '$someField',
             'buckets' => 3,
-        ]], $bucketStage->getExpression());
+        ]], $bucketAutoStage->getExpression());
     }
 }
